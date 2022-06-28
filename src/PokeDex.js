@@ -1,9 +1,10 @@
 import "./App.css";
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, createRef } from "react";
 import ReactLoading from "react-loading";
 import axios from "axios";
 import Modal from "react-modal";
 import BarChart from "./barchart";
+import Pdf from "react-to-pdf";
 
 function PokeDex() {
   const [pokemons, setPokemons] = useState([]);
@@ -11,7 +12,7 @@ function PokeDex() {
   const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("asc");
-
+  const ref = createRef();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -145,7 +146,7 @@ function PokeDex() {
           }}
           style={customStyles}
         >
-          <>
+          <div ref={ref}>
             <div style={{ display: "flex" }}>
               <img
                 alt={pokemonDetail?.name || ""}
@@ -170,8 +171,14 @@ function PokeDex() {
                 </tbody>
               </table>
             </div>
-            {/* <BarChart /> */}
-            Requirement:
+            <BarChart
+              labels={pokemonDetail.stats.map((row) => row.stat.name)}
+              chartData={pokemonDetail.stats.map((x) => x.base_stat)}
+            />
+            <Pdf targetRef={ref} filename="code-example.pdf">
+              {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
+            </Pdf>
+            {/* Requirement:
             <ul>
               <li>show the sprites front_default as the pokemon image</li>
               <li>
@@ -183,8 +190,8 @@ function PokeDex() {
                 Create a buttton to download the information generated in this
                 modal as pdf. (images and chart must be included)
               </li>
-            </ul>
-          </>
+            </ul> */}
+          </div>
         </Modal>
       )}
     </div>
