@@ -1,10 +1,16 @@
 import "./App.css";
-import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 function Home() {
   const [text, setText] = useState("");
   const [isReady, setIsReady] = useState(false);
+  const { push } = useHistory();
+  const onChange = (e) => {
+    const value = e.target.value;
+    setText(value);
+    setIsReady(value === "Ready!" ? true : false);
+  };
 
   return (
     <div className="App">
@@ -15,15 +21,23 @@ function Home() {
           className="App-logo"
           alt="logo"
           style={{ padding: "10px" }}
+          onClick={() => push("/pokedex")}
         />
-        <b>
-          Requirement: Try to show the hidden image and make it clickable that
-          goes to /pokedex when the input below is "Ready!" remember to hide the
-          red text away when "Ready!" is in the textbox.
-        </b>
+        {!isReady && (
+          <b>
+            Requirement: Try to show the hidden image and make it clickable that
+            goes to /pokedex when the input below is "Ready!" remember to hide
+            the red text away when "Ready!" is in the textbox.
+          </b>
+        )}
         <p>Are you ready to be a pokemon master?</p>
-        <input type="text" name="name" />
-        <span style={{ color: "red" }}>I am not ready yet!</span>
+        <input
+          type="text"
+          name="name"
+          value={text}
+          onChange={(e) => onChange(e)}
+        />
+        {!isReady && <span style={{ color: "red" }}>I am not ready yet!</span>}
       </header>
     </div>
   );

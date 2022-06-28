@@ -1,17 +1,16 @@
 import "./App.css";
 import Home from "./Home";
-import { Route, NavLink, HashRouter } from "react-router-dom";
+import { Route, BrowserRouter } from "react-router-dom";
 import PokeDex from "./PokeDex";
 
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <div>
-        <Route exact path="/" component={Home}/>
-        <Route path="/pokedex" component={PokeDex}/>
+        <Route path="/pokedex" component={PokeDex} />
+        <Route exact path="/" component={Home} />
       </div>
-      
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
